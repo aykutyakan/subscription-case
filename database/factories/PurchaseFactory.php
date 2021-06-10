@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Device;
 use App\Models\Purchase;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,8 +22,17 @@ class PurchaseFactory extends Factory
      */
     public function definition()
     {
+        $devices = $this->randomDevice();
         return [
-            //
+            "app_id" => $this->faker->unique->randomElement($devices)->app_id,
+            "reciept" => $this->faker->unique()->ean13,
+            "expire_date" => $this->faker->dateTimeBetween("-10 weeks", "+10 weeks"),
+            "is_active" => $this->faker->randomElement([true, false]),
         ];
+    }
+
+    private function randomDevice()
+    {
+        return Device::all();
     }
 }

@@ -12,6 +12,13 @@ class Purchase extends Model
         "app_id",
         "reciept",
         "expire_date",
+        "username",
+        "password",
         "is_active",
     ];
+
+    public function OwnerDevice()
+    {
+        return $this->belongsTo(Device::class, "app_id", "app_id");
+    }
 }

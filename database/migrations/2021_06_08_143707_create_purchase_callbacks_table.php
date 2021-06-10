@@ -15,6 +15,7 @@ class CreatePurchaseCallbacksTable extends Migration
     {
         Schema::create('purchase_callbacks', function (Blueprint $table) {
             $table->id();
+            $table->string("endpoint", 255);
             $table->timestamps();
         });
     }

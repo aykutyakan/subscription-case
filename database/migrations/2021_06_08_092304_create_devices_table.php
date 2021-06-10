@@ -21,6 +21,8 @@ class CreateDevicesTable extends Migration
             $table->string("client_token", 255);
 
             $table->timestamps();
+            
+            $table->primary(['uid', 'app_id']);	
         });
     }
 

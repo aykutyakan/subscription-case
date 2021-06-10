@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Device;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class DeviceFactory extends Factory
 {
@@ -21,8 +22,14 @@ class DeviceFactory extends Factory
      */
     public function definition()
     {
+        $lang = ["tr", "fr", "ar", "en", "sp", "de", "it", "us"];
+        $os = ["ios", "android"];
         return [
-            //
+            "uid" => $this->faker->uuid,
+            "app_id" => $this->faker->ean8,
+            "language" => $this->faker->randomElement($lang),
+            "operating_system" => $this->faker->randomElement($os),
+            "client_token" => Str::random(25),
         ];
     }
 }

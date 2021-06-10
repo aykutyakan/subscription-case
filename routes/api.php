@@ -17,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// Route::get('device-register', "");
+// Route::get('check-subscription',"");
+// Route::get('app-subscription');

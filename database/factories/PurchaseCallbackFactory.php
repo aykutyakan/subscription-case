@@ -22,7 +22,7 @@ class PurchaseCallbackFactory extends Factory
     public function definition()
     {
         return [
-            //
+            "endpoint" => "https://callback.example_purchase.com",
         ];
     }
 }
