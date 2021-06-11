@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DeviceRequest;
+use App\Services\RecieptProvider\RecieptProviderFactory;
 use App\Services\Repository\DeviceRepository\DeviceRepositoryInterface;
-use DateTime;
 use Illuminate\Http\Request;
 
 class DeviceController extends Controller
@@ -50,7 +50,17 @@ class DeviceController extends Controller
 
     public function purchase(Request $request)
     {
-        // devam edilecek
-        return "purchase";
+        $device = $this->deviceRepository->getDeviceIInfoWithPurchase($request->client_token);
+
+        $recieptProvider = RecieptProviderFactory::make($device->operating_system);
+        $recieptResult = $recieptProvider
+                            ->setCredentials($request->userName, $request->password)
+                            ->setRecieptCode($request->reciept)
+                            ->verify();
+        $device->purchase->expire_date = $recieptResult["expireDate"];
+        $device->purchase->is_active = $recieptResult["status"];
+        $device->purchase->update();
+
+        return response()->json($device->toArray());
     }
 }

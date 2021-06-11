@@ -14,8 +14,9 @@ class CreateDevicesTable extends Migration
     public function up()
     {
         Schema::create('devices', function (Blueprint $table) {
+            $table->id();
             $table->string("app_id", 255);
-            $table->string("uid", 255);
+            $table->string("device_id", 255);
             $table->string("language", 255);
             $table->string("operating_system", 255);
             $table->string("client_token", 255);
@@ -23,8 +24,7 @@ class CreateDevicesTable extends Migration
             $table->string('os_password');
             $table->timestamps();
             
-            $table->primary('app_id');
-            $table->index("uid");
+            $table->index(["app_id", "device_id"]);
         });
     }
 

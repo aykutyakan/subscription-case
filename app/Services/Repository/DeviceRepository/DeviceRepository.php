@@ -9,6 +9,7 @@ class  DeviceRepository implements DeviceRepositoryInterface{
   public function registerWithAppId(array $deviceInfo)
   {
     $deviceModel = new Device($deviceInfo);
+    $deviceModel->device_id = $deviceInfo["uid"];
     $deviceModel->client_token = time();
     return $deviceModel->save() ? $deviceModel : null; 
   }
@@ -19,9 +20,14 @@ class  DeviceRepository implements DeviceRepositoryInterface{
     return $existDevice;
   }
 
+  /**
+   * @param string $deviceId
+   * @param string $appId
+   * @return Device|null
+  */
   public function checkDeviceWithAppId($deviceId, $appId)
   {
-    $existDevice = Device::where("uid", $deviceId)->where("app_id", $appId)->first();
+    $existDevice = Device::where("device_id", $deviceId)->where("app_id", $appId)->first();
     if($existDevice){
       $existDevice->client_token = time();
       $existDevice->update();

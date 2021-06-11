@@ -2,7 +2,7 @@
 
 namespace App\Services\RecieptProvider;
 use GuzzleHttp\Client;
-class AndroidRecieptProvider implements BaseRecieptProvider {
+class AndroidRecieptProvider implements RecieptProviderInterface {
 
     private $userName;
     private $password;
@@ -27,7 +27,10 @@ class AndroidRecieptProvider implements BaseRecieptProvider {
   {
       $client = new Client();
       $res = $client->request('GET', 'https://app.case.local/api/mock-android-verify', [
-          'auth' => [$this->userName, $this->password]
+          'auth' => [$this->userName, $this->password],
+          'query' => [
+            "reciept"=> $this->reciept
+          ]
       ]);
       $resultArr = [];
       if($res->getStatusCode() == "200") {

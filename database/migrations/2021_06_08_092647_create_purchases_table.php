@@ -14,14 +14,14 @@ class CreatePurchasesTable extends Migration
     public function up()
     {
         Schema::create('purchases', function (Blueprint $table) {
-            $table->id();
-            $table->string('app_id')->unique();
+            $table->bigInteger('device_app_id');
             $table->timestamp("expire_date");
             $table->string("reciept",255)->unique();
             $table->boolean("is_active");
             $table->timestamps();
 
             $table->index("expire_date");
+            $table->primary("device_app_id");
         });
     }
 

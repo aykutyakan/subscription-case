@@ -24,7 +24,7 @@ class PurchaseFactory extends Factory
     {
         $devices = $this->randomDevice();
         return [
-            "app_id" => $this->faker->unique->randomElement($devices)->app_id,
+            "device_app_id" => $this->faker->unique->randomElement($devices)->id,
             "reciept" => $this->faker->unique()->ean13,
             "expire_date" => $this->faker->dateTimeBetween("-10 weeks", "+10 weeks"),
             "is_active" => $this->faker->randomElement([true, false]),

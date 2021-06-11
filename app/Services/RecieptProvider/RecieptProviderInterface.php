@@ -2,7 +2,7 @@
 
   namespace App\Services\RecieptProvider;
 
-  interface BaseRecieptProvider {
+  interface RecieptProviderInterface {
     
      public function verify();
 

@@ -3,8 +3,8 @@
 namespace App\Services\RecieptProvider;
 use GuzzleHttp\Client;
 
-class IosRecieptProvider extends BaseRecieptProvider {
-  private $userName;
+class IosRecieptProvider implements RecieptProviderInterface {
+    private $userName;
     private $password;
     private $reciept;
 
@@ -26,8 +26,11 @@ class IosRecieptProvider extends BaseRecieptProvider {
   public function verify()
   {
       $client = new Client();
-      $res = $client->request('GET', 'https://app.case.local/api/mock-android-verify', [
-          'auth' => [$this->userName, $this->password]
+      $res = $client->request('GET', 'http://app.case.local/api/mock-android-verify', [
+          'auth' => [$this->userName, $this->password],
+          'query' => [
+            "reciept"=> $this->reciept
+          ]
       ]);
       $resultArr = [];
       if($res->getStatusCode() == "200") {

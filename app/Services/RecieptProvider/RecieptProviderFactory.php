@@ -10,8 +10,8 @@ class RecieptProviderFactory {
    * @param Device
    * @return BaseRecieptProvider
   */
-  public static function make(Device $deviceOs) {
-    $deviceOs->operating_system == Device::OS_ANDROID 
+  public static function make(string $deviceOs) {
+    return $deviceOs == Device::OS_ANDROID 
       ? new AndroidRecieptProvider()
       : new IosRecieptProvider();
     }

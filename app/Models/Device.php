@@ -15,15 +15,17 @@ class Device extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        "uid",
+        "device_id",
         "app_id",
         "language",
         "operating_system",
+        "os_username",
+        "os_password",
         "client_token",
     ];
 
     public function purchase()
     {
-        return $this->hasOne(Purchase::class, "app_id", "app_id");
+        return $this->hasOne(Purchase::class, "device_app_id");
     }
 }

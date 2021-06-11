@@ -9,14 +9,14 @@ class Purchase extends Model
 {
     use HasFactory;
     protected $fillable = [
-        "app_id",
+        "device_app_id",
         "reciept",
         "expire_date",
         "is_active",
     ];
 
-    public function OwnerDevice()
+    public function ownerDevice()
     {
-        return $this->belongsTo(Device::class, "app_id", "app_id");
+        return $this->belongsTo(Device::class, "device_app_id", "id");
     }
 }

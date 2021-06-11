@@ -24,11 +24,14 @@ class DeviceFactory extends Factory
     {
         $lang = ["tr", "fr", "ar", "en", "sp", "de", "it", "us"];
         $os = ["ios", "android"];
+        $pass = ["password", "wrong-password"];
         return [
-            "uid" => $this->faker->uuid,
+            "device_id" => $this->faker->uuid,
             "app_id" => $this->faker->ean8,
             "language" => $this->faker->randomElement($lang),
             "operating_system" => $this->faker->randomElement($os),
+            "os_username"       => $this->faker->randomElement($os),
+            "os_password"       => $this->faker->randomElement($pass),
             "client_token" => Str::random(25),
         ];
     }
