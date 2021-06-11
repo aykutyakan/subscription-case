@@ -14,15 +14,17 @@ class CreateDevicesTable extends Migration
     public function up()
     {
         Schema::create('devices', function (Blueprint $table) {
-            $table->string("uid", 255);
             $table->string("app_id", 255);
+            $table->string("uid", 255);
             $table->string("language", 255);
             $table->string("operating_system", 255);
             $table->string("client_token", 255);
-
+            $table->string('os_username');
+            $table->string('os_password');
             $table->timestamps();
             
-            $table->primary(['uid', 'app_id']);	
+            $table->primary('app_id');
+            $table->index("uid");
         });
     }
 

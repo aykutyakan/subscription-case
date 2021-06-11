@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\MockApiController;
+use App\Http\Controllers\PurchaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +21,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Route::get('device-register', "");
-// Route::get('check-subscription',"");
-// Route::get('app-subscription');
+Route::put('device-register', [DeviceController::class, "register"]);
+Route::get('check-subscription',[DeviceController::class, "check"]);
+Route::get('app-subscription', [DeviceController::class, "purchase"]);
+
+
+Route::get('mock-android-verify', [MockApiController::class, "googleVerify"]);
+Route::get('mock-ios-verify', [MockApiController::class, "iosVerify"]);

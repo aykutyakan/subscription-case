@@ -17,7 +17,7 @@ class CreatePurchasesTable extends Migration
             $table->id();
             $table->string('app_id')->unique();
             $table->timestamp("expire_date");
-            $table->string("reciept",255);
+            $table->string("reciept",255)->unique();
             $table->boolean("is_active");
             $table->timestamps();
 

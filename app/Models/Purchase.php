@@ -12,8 +12,6 @@ class Purchase extends Model
         "app_id",
         "reciept",
         "expire_date",
-        "username",
-        "password",
         "is_active",
     ];
 
