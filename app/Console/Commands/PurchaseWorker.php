@@ -11,14 +11,14 @@ class PurchaseWorker extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'subscription:expired {limit=100}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Resolve expired deactived subscription';
 
     /**
      * Create a new command instance.
@@ -37,6 +37,9 @@ class PurchaseWorker extends Command
      */
     public function handle()
     {
+        $this->info("Fetching Task From Server...");
+        
+        $provider = $this->argument('limit');
         return 0;
     }
 }

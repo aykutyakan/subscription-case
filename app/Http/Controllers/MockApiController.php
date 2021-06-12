@@ -57,7 +57,7 @@ class MockApiController extends Controller
     private function generateExpireDate() 
     {
       $expiredDate = new \DateTime("now");
-      $expiredDate->modify(self::SUBSCRIPTONDAYS." days");
+      $expiredDate->modify("+".self::SUBSCRIPTONDAYS." days");
       return $expiredDate->format("Y-m-d H:i:s");
     }
 }

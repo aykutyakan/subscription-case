@@ -8,11 +8,7 @@ interface PurchaseRepositoryInterface
 {
   public function storePurchase(array $purchaseArr);
 
-  public function getPurchaseByAppId(string $appId);
+  public function getExpiredSubscription($limit);
 
-  public function renewExpireDatePurchase(Purchase $purchase);
-
-  public function canceledPurchase($purchase);
-
-  public function getExpiredPurchaseNonDeactive($limit = 500);
+  public function updateSubscription($purchase, $expireDate, $isActive);
 }

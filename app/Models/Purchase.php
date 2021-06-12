@@ -19,4 +19,9 @@ class Purchase extends Model
     {
         return $this->belongsTo(Device::class, "device_app_id", "id");
     }
+
+    public function scopeActive($query) 
+    {
+        return $query->where('is_active', 1);
+    }
 }

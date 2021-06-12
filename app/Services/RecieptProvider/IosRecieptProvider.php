@@ -36,7 +36,7 @@ class IosRecieptProvider implements RecieptProviderInterface {
       if($res->getStatusCode() == "200") {
           $resultArr = $this->generateResponse($res->getBody()->getContents());
       }
-      dd($resultArr);
+      return $resultArr;
   }
 
   private function generateResponse($content)
