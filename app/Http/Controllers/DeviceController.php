@@ -6,14 +6,11 @@ use App\Http\Requests\DeviceRequest;
 use App\Services\RecieptProvider\RecieptProviderFactory;
 use App\Services\Repository\DeviceRepository\DeviceRepositoryInterface;
 use App\Services\Repository\PurchaseRepository\PurchaseRepository;
-use App\Services\ResolveSubscription\ResolveSubscriptionManager;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DeviceController extends Controller
 {
     private $deviceRepository;
-    private $purchaseRepository;
     public function __construct(DeviceRepositoryInterface $deviceRepository, PurchaseRepository $purchaseRepository)
     {
         $this->deviceRepository  = $deviceRepository;
@@ -38,14 +35,6 @@ class DeviceController extends Controller
 
     public function check(Request $request)
     {
-
-        $list =$this->purchaseRepository->getExpiredSubscription(100);
-        dd($list->toArray());
-        $resolve = new ResolveSubscriptionManager();
-        $resolve->resolveExpire(10)
-                    ->verifySubscription();
-        return;
-
         $device = $this->deviceRepository->getDeviceIInfoWithPurchase($request->client_token);
         $returnJson["subsriction"] = false;
         if($device->purchase)
