@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Purchase extends Model
 {
     use HasFactory;
+    protected $primaryKey = "device_app_id";
+    
     protected $fillable = [
         "device_app_id",
         "reciept",

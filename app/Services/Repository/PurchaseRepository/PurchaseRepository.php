@@ -17,6 +17,7 @@ class  PurchaseRepository implements PurchaseRepositoryInterface {
 
   public function getExpiredSubscription($limit)
   {
+      $limit = $limit > 0 ? $limit : 1;
       $result = Purchase::
                           with("ownerDevice")
                           ->whereDate("expire_date", "<", Carbon::now())

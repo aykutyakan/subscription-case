@@ -1,6 +1,8 @@
 <?php 
 
 namespace App\Services\RecieptProvider;
+
+use App\Http\Controllers\MockApiController;
 use GuzzleHttp\Client;
 class AndroidRecieptProvider implements RecieptProviderInterface {
 

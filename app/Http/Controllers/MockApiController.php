@@ -40,8 +40,7 @@ class MockApiController extends Controller
 
         return response()->json($result);
     }
-
-    private function verifyReciept($reciept)
+    public function verifyReciept($reciept)
     {
         return [
             "status" => $this->isValidRecieptCode($reciept) ?? false,

@@ -2,9 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Services\ResolveSubscription\ResolveSubscriptionManager;
 use Illuminate\Console\Command;
 
-class PurchaseWorker extends Command
+class SubscriptionWorker extends Command
 {
     /**
      * The name and signature of the console command.
@@ -25,9 +26,11 @@ class PurchaseWorker extends Command
      *
      * @return void
      */
-    public function __construct()
+    private $resolveSubscriptionManager;
+    public function __construct(ResolveSubscriptionManager $resolveSubscriptionManager)
     {
         parent::__construct();
+        $this->resolveSubscriptionManager = $resolveSubscriptionManager;
     }
 
     /**
@@ -37,9 +40,12 @@ class PurchaseWorker extends Command
      */
     public function handle()
     {
-        $this->info("Fetching Task From Server...");
+        $this->info("Ressolving Expired Subscription...");
         
-        $provider = $this->argument('limit');
+        $limit = $this->argument('limit');
+        $this->resolveSubscriptionManager
+                ->resolveExpire($limit)
+                ->verifySubscription();
         return 0;
     }
 }

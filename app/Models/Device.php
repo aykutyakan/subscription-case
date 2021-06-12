@@ -11,8 +11,6 @@ class Device extends Model
     use HasFactory;
     const OS_IOS = 'ios';
     const OS_ANDROID = 'android';
-    protected $primaryKey = "app_id";
-    public $incrementing = false;
 
     protected $fillable = [
         "device_id",
