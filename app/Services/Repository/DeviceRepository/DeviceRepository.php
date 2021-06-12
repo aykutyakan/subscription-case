@@ -16,7 +16,11 @@ class  DeviceRepository implements DeviceRepositoryInterface{
 
   public function getDeviceIInfoWithPurchase($clientToken)
   {
-    $existDevice = Device::with("purchase")->where("client_token", $clientToken)->firstOrFail();
+    $existDevice = Device::
+                  select("device_id", "app_id", "operating_system", "client_token" )
+                  ->with("purchase")
+                  ->where("client_token", $clientToken)
+                  ->firstOrFail();
     return $existDevice;
   }
 

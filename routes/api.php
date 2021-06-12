@@ -17,14 +17,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::put('device-register', [DeviceController::class, "register"]);
 Route::get('check-subscription',[DeviceController::class, "check"]);
 Route::get('app-subscription', [DeviceController::class, "purchase"]);
 
-
-Route::get('mock-android-verify', [MockApiController::class, "googleVerify"]);
-Route::get('mock-ios-verify', [MockApiController::class, "iosVerify"]);
+Route::group(["prefix" => "mock", "middleware" => ["rateLimitForMock"]], function(){
+    Route::get('android-verify', [MockApiController::class, "androidVerify"]);
+    Route::get('ios-verify', [MockApiController::class, "iosVerify"]);
+});

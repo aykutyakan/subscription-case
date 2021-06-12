@@ -44,7 +44,7 @@ class MockApiController extends Controller
     {
         return [
             "status" => $this->isValidRecieptCode($reciept) ?? false,
-            "expired_date" => $this->generateExpireDate()
+            "expire_date" => $this->generateExpireDate()
         ];
     }
 
@@ -55,7 +55,7 @@ class MockApiController extends Controller
 
     private function generateExpireDate() 
     {
-      $expiredDate = new \DateTime("now");
+      $expiredDate = new \DateTime("now", new \DateTimeZone("+6"));
       $expiredDate->modify("+".self::SUBSCRIPTONDAYS." days");
       return $expiredDate->format("Y-m-d H:i:s");
     }

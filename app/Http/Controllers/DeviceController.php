@@ -59,10 +59,9 @@ class DeviceController extends Controller
                             ->setCredentials($request->userName, $request->password)
                             ->setRecieptCode($request->reciept)
                             ->verify();
-        $device->purchase->expire_date = $recieptResult["expireDate"];
-        $device->purchase->is_active = $recieptResult["status"];
-        $device->purchase->update();
-
+        
+        $this->purchaseRepository->updateSubscription($device->purchase, $recieptResult["expire_date"], $recieptResult["status"]);
+        
         return response()->json($device->toArray());
     }
 }

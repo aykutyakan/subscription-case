@@ -5,7 +5,6 @@ namespace App\Services\ResolveSubscription;
 use App\Services\RecieptProvider\RecieptProviderFactory;
 use App\Services\Repository\PurchaseRepository\PurchaseRepository;
 
-
 class ResolveSubscriptionManager {
 
     private $purchaseRepository;
@@ -31,7 +30,8 @@ class ResolveSubscriptionManager {
                                 ->setCredentials($ownerDevice->userName, $ownerDevice->password)
                                 ->setRecieptCode($purchase->reciept)
                                 ->verify();
-            $this->purchaseRepository->updateSubscription($purchase, $recieptResult["expired_date"], $recieptResult["status"]);
+            if(isset($recieptResult["status"]) && isset($recieptResult["expire_date"]))
+                $this->purchaseRepository->updateSubscription($purchase, $recieptResult["expire_date"], $recieptResult["status"]);
         }
     }
 }

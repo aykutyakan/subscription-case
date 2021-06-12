@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\CheckSubrscriptionExpireDateJob;
 use App\Services\ResolveSubscription\ResolveSubscriptionManager;
 use Illuminate\Console\Command;
 
@@ -26,11 +27,9 @@ class SubscriptionWorker extends Command
      *
      * @return void
      */
-    private $resolveSubscriptionManager;
-    public function __construct(ResolveSubscriptionManager $resolveSubscriptionManager)
+    public function __construct()
     {
         parent::__construct();
-        $this->resolveSubscriptionManager = $resolveSubscriptionManager;
     }
 
     /**
@@ -41,11 +40,7 @@ class SubscriptionWorker extends Command
     public function handle()
     {
         $this->info("Ressolving Expired Subscription...");
-        
-        $limit = $this->argument('limit');
-        $this->resolveSubscriptionManager
-                ->resolveExpire($limit)
-                ->verifySubscription();
+        CheckSubrscriptionExpireDateJob::dispatch(100);
         return 0;
     }
 }

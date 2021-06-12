@@ -28,7 +28,7 @@ class AndroidRecieptProvider implements RecieptProviderInterface {
   public function verify()
   {
       $client = new Client();
-      $res = $client->request('GET', 'https://app.case.local/api/mock-android-verify', [
+      $res = $client->request('GET', 'https://app.case.local/api/mock/android-verify', [
           'auth' => [$this->userName, $this->password],
           'query' => [
             "reciept"=> $this->reciept

@@ -5,7 +5,7 @@ namespace App\Services\Repository\PurchaseRepository;
 use App\Models\Purchase;
 use Illuminate\Support\Carbon;
 
-class  PurchaseRepository implements PurchaseRepositoryInterface {
+class PurchaseRepository implements PurchaseRepositoryInterface {
 
   public function storePurchase(array $purchaseArr)
   {
@@ -18,8 +18,8 @@ class  PurchaseRepository implements PurchaseRepositoryInterface {
   public function getExpiredSubscription($limit)
   {
       $limit = $limit > 0 ? $limit : 1;
-      $result = Purchase::
-                          with("ownerDevice")
+      $result = Purchase::select("device_app_id", "device_app_id", "expire_date", "is_active")
+                          ->with("ownerDevice")
                           ->whereDate("expire_date", "<", Carbon::now())
                           ->active()
                           ->limit($limit)
@@ -29,8 +29,10 @@ class  PurchaseRepository implements PurchaseRepositoryInterface {
 
   public function updateSubscription($purchase, $expireDate, $isActive)
   {
-    $purchase->expire_date = $expireDate;
-    $purchase->is_active = $isActive;
-    $purchase->update();
+    if(isset($recieptResult["status"]) && isset($recieptResult["expire_date"])) {
+      $purchase->expire_date = $expireDate;
+      $purchase->is_active = $isActive;
+      $purchase->update();
+    }
   }
 }

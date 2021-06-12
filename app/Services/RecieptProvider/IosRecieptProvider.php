@@ -28,7 +28,7 @@ class IosRecieptProvider implements RecieptProviderInterface {
   public function verify()
   {
       $client = new Client();
-      $res = $client->request('GET', 'http://app.case.local/api/mock-android-verify', [
+      $res = $client->request('GET', 'http://app.case.local/api/mock/android-verify', [
           'auth' => [$this->userName, $this->password],
           'query' => [
             "reciept"=> $this->reciept
