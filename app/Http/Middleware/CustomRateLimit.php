@@ -16,7 +16,7 @@ class CustomRateLimit
      */
     public function handle(Request $request, Closure $next)
     {
-        return $request->reciept % 6 == 0
+        return ($request->reciept / 100 ) % 6 == 0
                         ? abort(500)
                         : $next($request);
     }

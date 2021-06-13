@@ -56,12 +56,15 @@ class DeviceController extends Controller
 
         $recieptProvider = RecieptProviderFactory::make($device->operating_system);
         $recieptResult = $recieptProvider
-                            ->setCredentials($request->userName, $request->password)
+                            ->setCredentials($device->os_username, $device->os_password)
                             ->setRecieptCode($request->reciept)
                             ->verify();
-        
-        $this->purchaseRepository->updateSubscription($device->purchase, $recieptResult["expire_date"], $recieptResult["status"]);
-        
-        return response()->json($device->toArray());
+        if(isset($recieptResult->expire_date) && isset($recieptResult->status)) {
+            $this->purchaseRepository->updateSubscription($device->purchase, $recieptResult->expire_date, $recieptResult->status);
+            return response()->json($device->toArray());
+        }
+        else
+            return response()->json(["errors" => $recieptResult->errors]);
+
     }
 }

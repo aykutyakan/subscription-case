@@ -39,8 +39,9 @@ class SubscriptionWorker extends Command
      */
     public function handle()
     {
+        $limit = $this->argument("limit");
         $this->info("Ressolving Expired Subscription...");
-        CheckSubrscriptionExpireDateJob::dispatch(100);
+        CheckSubrscriptionExpireDateJob::dispatch($limit);
         return 0;
     }
 }

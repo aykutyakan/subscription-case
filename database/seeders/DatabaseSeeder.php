@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         \App\Models\PurchaseCallback::factory(1)->create();
         Device::factory(250)->create();
-        Purchase::factory(50)->create();
+        Purchase::factory(250)->create();
         // \App\Models\User::factory(10)->create();
     }
 }

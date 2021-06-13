@@ -15,13 +15,13 @@ class MockApiController extends Controller
         if( base64_decode( $token ) == "android:password")
         {
             $result = $this->verifyReciept($request->reciept);
+            return response()->json($result, 200);
         } else {
-            $result = [
-                "errors" => "Kimlik bilgileri hatalı"
-            ];
+            return response()
+                    ->json(["errors" => "Kimlik bilgileri hatalı"], 401);
         }
 
-        return response()->json($result);
+        
         
     }
     
@@ -32,10 +32,10 @@ class MockApiController extends Controller
         if( base64_decode( $token ) == "ios:password")
         {
             $result = $this->verifyReciept($request->reciept);
+            return response()->json($result, 200);
         } else {
-            $result = [
-                "errors" => "Kimlik bilgileri hatalı"
-            ];
+            return response()
+                    ->json(["errors" => "Kimlik bilgileri hatalı"], 401);
         }
 
         return response()->json($result);

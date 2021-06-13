@@ -25,9 +25,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('subscription:expired')
-                    ->everyMinute()
-                    ->appendOutputTo (storage_path().'/logs/subscription_worker.log');;
+        $schedule->command('subscription:expired 10')
+                    ->everyMinute();
     }
 
     /**

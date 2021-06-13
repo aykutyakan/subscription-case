@@ -2,8 +2,6 @@
 
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\MockApiController;
-use App\Http\Controllers\PurchaseController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*

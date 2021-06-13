@@ -4,6 +4,8 @@ namespace App\Services\RecieptProvider;
 
 use App\Http\Controllers\MockApiController;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
+
 class AndroidRecieptProvider implements RecieptProviderInterface {
 
     private $userName;
@@ -23,20 +25,22 @@ class AndroidRecieptProvider implements RecieptProviderInterface {
     }
 
   /**
-   * @return array
+   * @return array  
   */
   public function verify()
   {
-      $client = new Client();
-      $res = $client->request('GET', 'https://app.case.local/api/mock/android-verify', [
+      $client = new Client(['http_errors' => false]);
+      $res = $client->request('GET', 'http://app.case.local/api/mock/android-verify', [
           'auth' => [$this->userName, $this->password],
           'query' => [
             "reciept"=> $this->reciept
           ]
       ]);
-      $resultArr = [];
+      $resultArr= [];
       if($res->getStatusCode() == "200") {
-          $resultArr = $this->generateResponse($res->getBody()->getContents());
+        $resultArr = $this->generateResponse($res->getBody()->getContents());
+      } else {
+        $resultArr = (object)["errors" => "Bilinmeye hata"]; 
       }
       return $resultArr;
   }
