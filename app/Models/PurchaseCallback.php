@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PurchaseCallback extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        "endpoint"
+    ];
 }

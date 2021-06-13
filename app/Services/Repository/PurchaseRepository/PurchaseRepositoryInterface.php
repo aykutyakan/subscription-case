@@ -11,4 +11,8 @@ interface PurchaseRepositoryInterface
   public function getExpiredSubscription($limit);
 
   public function updateSubscription($purchase, $expireDate, $isActive);
+  
+  public function checkPurchaseItem($deviceAppId);
+  
+  public function startedSubscription($deviceAppId, $expireDate, $isActive, $reciept);
 }

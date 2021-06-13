@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DeviceRequest;
+use App\Jobs\PurchaseCallbackStartedJob;
 use App\Services\RecieptProvider\RecieptProviderFactory;
 use App\Services\Repository\DeviceRepository\DeviceRepositoryInterface;
 use App\Services\Repository\PurchaseRepository\PurchaseRepository;
@@ -59,12 +60,22 @@ class DeviceController extends Controller
                             ->setCredentials($device->os_username, $device->os_password)
                             ->setRecieptCode($request->reciept)
                             ->verify();
-        if(isset($recieptResult->expire_date) && isset($recieptResult->status)) {
-            $this->purchaseRepository->updateSubscription($device->purchase, $recieptResult->expire_date, $recieptResult->status);
-            return response()->json($device->toArray());
+        if( !$this->purchaseRepository->checkPurchaseItem($device->id)
+            &&  isset($recieptResult->expire_date) 
+            && isset($recieptResult->status)
+        ) {
+            $newPurchase =$this->purchaseRepository->startedSubscription(
+                $device->id, 
+                $recieptResult->expire_date, 
+                $recieptResult->status, 
+                $request->reciept
+            );
+            if($newPurchase)
+                PurchaseCallbackStartedJob::dispatch($device->device_id, $device->app_id);
+            return response()->json($newPurchase);
         }
         else
-            return response()->json(["errors" => $recieptResult->errors]);
+            return response()->json(["errors" => "Abonelik Başlatılamadı"]);
 
     }
 }

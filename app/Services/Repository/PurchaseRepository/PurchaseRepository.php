@@ -34,4 +34,19 @@ class PurchaseRepository implements PurchaseRepositoryInterface {
       $purchase->is_active = $isActive;
       $purchase->update();
   }
+  public function checkPurchaseItem($deviceAppId)
+  {
+    return Purchase::find($deviceAppId);
+  }
+  public function startedSubscription($deviceAppId, $expireDate, $isActive, $reciept)
+  { 
+    $newPurchase = new Purchase();
+    $newPurchase->device_app_id = $deviceAppId;
+    $newPurchase->expire_date = $expireDate;
+    $newPurchase->is_active = $isActive;
+    $newPurchase->reciept = $reciept;
+    return $newPurchase->save() 
+                          ? $newPurchase->only("expire_date", "is_active") 
+                          : null;
+  }
 }

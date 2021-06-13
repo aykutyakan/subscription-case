@@ -2,35 +2,56 @@
 
 namespace App\Services\Callback;
 
-use App\Models\Purchase;
 use App\Models\PurchaseCallback;
 use GuzzleHttp\Client;
 
-class PurchaseCalbackProvider implements PurchseCallbackInterface {
+class PurchaseCalbackProvider implements PurchaseCallbackProviderInterface {
 
     private $client;
-    private $purchase;
     private $callbackPurchaseInfo;
-    public function __construct()
+    private $deviceId;
+    private $appId;
+    public function __construct($deviceId, $appId)
     {
-        $this->client =new Client();
+        $this->client = new Client(['http_errors' => false]);
         $this->callbackPurchaseInfo = PurchaseCallback::first();
+        $this->deviceId = $deviceId;
+        $this->appId = $appId;
     }
 
-    public function setPurchase(Purchase $purchase)
+    public function requestForStarted()
     {
-     $this->purchase = $purchase;
-     return $this;   
+        $this->client->request("POST", 
+                            $this->callbackPurchaseInfo->endpoint, 
+                            ['query' => [
+                                "deviceId" => $this->deviceId,
+                                "appId" => $this->appId,
+                                "type"=> PurchaseCallbackEnum::STARTED
+                              ]
+                            ]);
     }
 
-    public function requestForCreated()
+    public function requestForRenewed()
     {
-
+        $this->client->request("POST", 
+                            $this->callbackPurchaseInfo->endpoint, 
+                            ['query' => [
+                                "deviceId" => $this->deviceId,
+                                "appId" => $this->appId,
+                                "type"=> PurchaseCallbackEnum::RENEWED
+                              ]
+                            ]);
     }
 
-    public function requestForUpdate()
-    {}
-
-    public function requestForDeleted()
-    {}
+    public function requestForCanceled()
+    {
+        $this->client->request("POST", 
+                            $this->callbackPurchaseInfo->endpoint, 
+                            ['query' => [
+                                "deviceId" => $this->deviceId,
+                                "appId" => $this->appId,
+                                "type"=> PurchaseCallbackEnum::CANCELED
+                              ]
+                            ]);
+    }
 }

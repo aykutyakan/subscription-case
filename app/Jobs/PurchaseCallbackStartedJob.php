@@ -2,7 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Services\ResolveSubscription\ResolveSubscriptionManager;
+use App\Services\Callback\PurchaseCallbackEnum;
+use App\Services\Callback\PurchaseCallbackFacede;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -10,20 +11,22 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class CheckSubrscriptionExpireDateJob implements ShouldQueue
+class PurchaseCallbackStartedJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    private $resolveSubscriptionManager;
-    private $limit;
+    
+    private $deviceId;
+    private $appId;
+
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(int $limit)
+    public function __construct($deviceId, $appId)
     {
-        $this->limit = $limit;
-        $this->resolveSubscriptionManager = new ResolveSubscriptionManager();
+        $this->deviceId = $deviceId;
+        $this->appId    = $appId;
     }
 
     /**
@@ -33,8 +36,6 @@ class CheckSubrscriptionExpireDateJob implements ShouldQueue
      */
     public function handle()
     {
-        $this->resolveSubscriptionManager
-                ->resolveExpire($this->limit)
-                ->verifySubscription();
+        PurchaseCallbackFacede::handle($this->deviceId, $this->appId, PurchaseCallbackEnum::STARTED);
     }
 }
