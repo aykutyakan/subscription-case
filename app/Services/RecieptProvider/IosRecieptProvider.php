@@ -3,7 +3,6 @@
 namespace App\Services\RecieptProvider;
 
 use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Log;
 
 class IosRecieptProvider implements RecieptProviderInterface {
     private $userName;
