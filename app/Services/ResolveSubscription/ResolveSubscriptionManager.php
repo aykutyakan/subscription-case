@@ -2,6 +2,7 @@
 
 namespace App\Services\ResolveSubscription;
 
+use App\Jobs\PurchaseCallbackCanceledJob;
 use App\Jobs\PurchaseCallbackRenewedJob;
 use App\Services\RecieptProvider\RecieptProviderFactory;
 use App\Services\Repository\PurchaseRepository\PurchaseRepository;
@@ -33,7 +34,10 @@ class ResolveSubscriptionManager {
                                 ->setRecieptCode($purchase->reciept)
                                 ->verify();
             if(isset($recieptResult->expire_date) && isset($recieptResult->status)){
-                PurchaseCallbackRenewedJob::dispatch($ownerDevice->device_id, $ownerDevice->app_id);
+                if($recieptResult->status)
+                    PurchaseCallbackRenewedJob::dispatch($ownerDevice->device_id, $ownerDevice->app_id);
+                else 
+                    PurchaseCallbackCanceledJob::dispatch($ownerDevice->device_id, $ownerDevice->app_id);
                 $this->purchaseRepository->updateSubscription($purchase, $recieptResult->expire_date, $recieptResult->status);
             }
         }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DeviceRequest;
+use App\Jobs\PurchaseCallbackCanceledJob;
 use App\Jobs\PurchaseCallbackStartedJob;
 use App\Services\RecieptProvider\RecieptProviderFactory;
 use App\Services\Repository\DeviceRepository\DeviceRepositoryInterface;
@@ -70,8 +71,10 @@ class APIDeviceController extends Controller
                 $recieptResult->status, 
                 $request->reciept
             );
-            if($newPurchase)
+            if($newPurchase->status)
                 PurchaseCallbackStartedJob::dispatch($device->device_id, $device->app_id);
+            else 
+                PurchaseCallbackCanceledJob::dispatch($device->device_id, $device->app_id);
             return response()->json($newPurchase);
         }
         else
