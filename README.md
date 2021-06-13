@@ -61,3 +61,11 @@ php artisan subscription:expired
 ## Calback işlemi
 
 Sistemde abonelikler üzerinde bir işlem yapıldığı zaman işlemin durumu(started, renewed, canceled) işlemleri için tetiklenecektir. DB üzerinde kayıtlı endpoint adresine `deviceId, appId, type`  parametreleri ile  istek atılacaktır. 
+
+## Raporlama işlemi
+
+Sistemde yapılan günlük işlemlerin özetini alabileceği sistemdir. Raporlama almak için aşağıdaki endpointe istek atılmalıdır. 
+```sh
+GET api/subscription-report
+```
+Yapılan istek sonuncunda `started renewed canceled` değerlerine ait toplam sayılar dönecektir.
