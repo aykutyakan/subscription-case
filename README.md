@@ -1,62 +1,63 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+## Kurulum
+```sh
+$ git clone https://github.com/aykutyakan/subscription-case .
+$ compoer install
+$ mv .env.example .env
+$ php artisan key:generate
+```
+## Veritabanı kurlumu
+Veritabanı bilgilerini .env dosyasına yazalım ve sonra aşağıdaki komutları çalıştıralım
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+```sh
+$ php artisan migrate
+$ php artisan db:seed
+```
 
-## About Laravel
+## Sistem API Kullanımı
+Sistemde kayıtlı olan endpoint 
+```sh
+ api\device-register PUT
+ api\check-subscription GET
+ api\app-subscription GET
+```
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Cihaz Kaydetme
+Sisteme kullanımı için yapılacak ilk iş cihazın app bilgisi ile kaydedilmesi gerekiyor.
+Kaydetme işlemi `api\device-register` endpointe `PUT` isteği atmasıdır.Bu istek içinde bazı bilgilerin parametrelerin olması gerekiyor.
+Gönderilecek parametre şu şekilde olmalı.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+**uid**: Cihazın ID değeri olacak
+**app_id** : Uygulamanın ID değeri olacak
+**language** Uygulamanın kullandığı dil olacak
+**operating_system** Uygulamanın çalıştığı işletim sistemi olacak. Parametre sadece *`ios`* veya *`android`* değerlerini kabul edecektir
+**os_username** Ugulamanın google ve Ios için doğrulama yapacağı basic authenticated bilgisi olacak. Kullanıcı adı olarak kullanılacak
+**os_password** Ugulamanın google ve Ios için doğrulama yapacağı basic authenticated bilgisi olacak.Şifre olarak kullanılacak
 
-## Learning Laravel
+Sisteme bu parametreler ile istek atıldığında validasyon işlemi çalışacak ve bu veriler doğrulanırsa sisteme kayıt edilecek. Kayıt işlemi sonrasında geriye bir **client_token** değeri döndürülecek. Bundan sonraki api istekleri bu token ile erişim sağlanacaktır. Tekrar istek atması halinde var olan `client_token` nesnesi güncellenecektir.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Abonelik başlatma 
+Sistemde kayıtlı olan cihazların abonelik hizmetini başlatmasını sağlayan servistir. İstek yapmak için `api\app-subscription`  endpoint adresi kullanılacaktır. Bu endpoint atılacak istekleri için gerekli olan parametreler şunlardır.
+**client_token :** Kayıtlı olan cihazlarda bulunan token değeri
+**reciept :** Abonelik işlemi için yaptığı ödemenin dekont numarası.
+Atılan istek sonucunda token değeri ve reciept değeri kontrol edilecek 
+Kontrol edildikten sonra işlemler başarılı ise geriye expire_date dönüş süresini ve is_ative durumunu belirten değerler dönecektir.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Abonelik kontrolü
+Sistemde kayıtlı olan cihaz sahip olduğu aboneliğin durumunu görebilecektir. Kontrol edebilmek için sisteme `api\check-subscription` endpoint adresini kullanmalıdır. Bu adrese yapacağı istekte ise gerekli olan parametre `client_token` parametresi gereklidir.
+**client_token :** Kayıtlı olan cihazlara verilen token değeri
+Yapılan istek sonucunda kontrol edilen token değerine uygul olan aboneliğin durumu `subscription` değeri ile boolean şeklinde döndürülecektir.
+## Sistem Worker Kullanımı
+Worker arka planda çalışacak olan abonelik hizmetini kontrol eden servislerimizdir. Worker çalıştığı zaman sistemde kayıtlı olan tüm süresi geçmiş abonelikler belirli aralıklarla ve belirli adetler olmak üzere kontrole edilecektir. Süresi geçmiş  ve durumu aktif olan abonelik tekrar doğrulama işlemi yapılacak. Bu doğrulama işlemi sonucunda başarılı ise sistemdeki abonelik tarihi güncellenecek güncellenecek. Worker çalışması için shell ekrarnından aşağıdaki komut çalıştırılmalıdır.Bu komut ile sistem her 5 dk içerisinde (varsayılan 100 adet) kayıtları kontrol edecektir.
+```sh
+php artisan schedule:work
+```
+Ayrıca cronjob olarak aşağıdaki komut yardımı ile çalıştırılabilir.
+```sh
+php artisan subscription:expired
+```
 
-## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Calback işlemi
 
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Sistemde abonelikler üzerinde bir işlem yapıldığı zaman işlemin durumu(started, renewed, canceled) işlemleri için tetiklenecektir. DB üzerinde kayıtlı endpoint adresine `deviceId, appId, type`  parametreleri ile  istek atılacaktır. 
