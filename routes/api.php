@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\APIReportController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\MockApiController;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,8 @@ use Illuminate\Support\Facades\Route;
 Route::put('device-register', [DeviceController::class, "register"]);
 Route::get('check-subscription',[DeviceController::class, "check"]);
 Route::get('app-subscription', [DeviceController::class, "purchase"]);
+
+Route::get('subscription-report', [APIReportController::class, "report"]);
 
 Route::group(["prefix" => "mock", "middleware" => ["rateLimitForMock"]], function(){
     Route::get('android-verify', [MockApiController::class, "androidVerify"]);

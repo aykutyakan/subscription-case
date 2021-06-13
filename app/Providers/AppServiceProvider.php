@@ -9,6 +9,7 @@ use App\Services\Repository\DeviceRepository\DeviceRepositoryInterface;
 use App\Services\Repository\PurchaseRepository\PurchaseRepository;
 use App\Services\Repository\PurchaseRepository\PurchaseRepositoryInterface;
 use App\Services\ResolveSubscription\ResolveSubscriptionManager;
+use App\Services\SubscriptionReport\SubscriptionReportProvider;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PurchaseRepositoryInterface::class, PurchaseRepository::class);
         $this->app->bind(ResolveSubscriptionManager::class, ResolveSubscriptionManager::class);
         $this->app->bind(PurchseCallbackProviderInterface::class, PurchaseCalbackProvider::class);
+        $this->app->bind(SubscriptionReportProvider::class, SubscriptionReportProvider::class);
     }
 
     /**

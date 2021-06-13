@@ -49,4 +49,12 @@ class PurchaseRepository implements PurchaseRepositoryInterface {
                           ? $newPurchase->only("expire_date", "is_active") 
                           : null;
   }
+  
+  public function getTodaySubscriptionActivity()
+  {
+    $result = Purchase::select("is_active", "created_at", "updated_at")
+                        ->whereDate("updated_at", "=", Carbon::today()->toDateString())
+                        ->get();
+    return $result;
+  }
 }

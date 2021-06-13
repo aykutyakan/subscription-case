@@ -15,4 +15,6 @@ interface PurchaseRepositoryInterface
   public function checkPurchaseItem($deviceAppId);
   
   public function startedSubscription($deviceAppId, $expireDate, $isActive, $reciept);
+
+  public function getTodaySubscriptionActivity();
 }
