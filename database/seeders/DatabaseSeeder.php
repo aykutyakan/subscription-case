@@ -16,8 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         \App\Models\PurchaseCallback::factory(1)->create();
-        Device::factory(250)->create();
-        Purchase::factory(250)->create();
-        // \App\Models\User::factory(10)->create();
+        // Device::factory(250)->create();
+        // Purchase::factory(250)->create();
     }
 }
